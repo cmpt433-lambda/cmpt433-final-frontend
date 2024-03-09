@@ -63,7 +63,7 @@ export default function Home() {
       .then(({ data }) => {
         // map status data into chart data
 
-        const deviceStatuses: Array<any> = data.DeviceStatuses;
+        let deviceStatuses: Array<any> = data.DeviceStatuses;
         if (deviceStatuses.length === 0) {
           return;
         }
@@ -72,13 +72,15 @@ export default function Home() {
         const temp: number[] = [];
         const label: string[] = [];
 
+        setLocData(deviceStatuses[0].location);
+
+        deviceStatuses = deviceStatuses.reverse();
         deviceStatuses.forEach(({ temperature_c, humidity, timestamp }) => {
           label.push(new Date(timestamp * 1000).toLocaleTimeString());
           temp.push(temperature_c);
           hum.push(humidity);
         });
 
-        setLocData(deviceStatuses[0].location);
         setStatusData({
           labels: label,
           datasets: [
